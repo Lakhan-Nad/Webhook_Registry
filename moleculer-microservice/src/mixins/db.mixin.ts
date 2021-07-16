@@ -2,6 +2,7 @@
 
 import { Context, Service, ServiceSchema } from "moleculer";
 import DbService from "moleculer-db";
+import * as config from "../config";
 
 export default class Connection
 	implements Partial<ServiceSchema>, ThisType<Service>
@@ -9,7 +10,7 @@ export default class Connection
 	private cacheCleanEventName: string;
 	private collection: string;
 	private schema: Partial<ServiceSchema> & ThisType<Service>;
-	private MONGO_URI: string = process.env.MONGO_URI;
+	private MONGO_URI: string = config.MONGO_URI;
 
 	public constructor(public collectionName: string) {
 		this.collection = collectionName;
@@ -64,7 +65,7 @@ export default class Connection
 			// Mongo adapter
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const MongoAdapter = require("moleculer-db-adapter-mongo");
-			this.schema.adapter = new MongoAdapter(process.env.MONGO_URI);
+			this.schema.adapter = new MongoAdapter(this.MONGO_URI);
 			this.schema.collection = this.collection;
 		} else {
 			throw new Error("MONGO_URI environment variable is not set.");

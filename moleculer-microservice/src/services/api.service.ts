@@ -2,6 +2,7 @@ import { IncomingMessage } from "http";
 import { Service, ServiceBroker, Context } from "moleculer";
 import ApiGateway from "moleculer-web";
 import * as bodyParser from "body-parser";
+import * as config from "../config";
 
 export default class ApiService extends Service {
 	public constructor(broker: ServiceBroker) {
@@ -12,7 +13,7 @@ export default class ApiService extends Service {
 			mixins: [ApiGateway],
 			path: "/",
 			settings: {
-				port: process.env.PORT || 3000,
+				port: config.PORT,
 				use: [bodyParser.json()],
 				routes: [
 					{

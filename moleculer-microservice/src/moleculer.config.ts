@@ -2,8 +2,7 @@
 
 import { BrokerOptions, Errors, LogLevels, MetricRegistry } from "moleculer";
 
-import * as DotEnv from "dotenv";
-DotEnv.config();
+import * as config from "./config";
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -57,7 +56,7 @@ const brokerConfig: BrokerOptions = {
 	},
 	// Default log level for built-in console logger. It can be overwritten in logger options above.
 	// Available values: trace, debug, info, warn, error, fatal
-	logLevel: (process.env.LOG_LEVEL as LogLevels) || "info",
+	logLevel: config.LOG_LEVEL,
 
 	// Define transporter.
 	// More info: https://moleculer.services/docs/0.14/networking.html
@@ -70,7 +69,7 @@ const brokerConfig: BrokerOptions = {
 	cacher: {
 		type: "Redis",
 		redis: {
-			url: process.env.REDIS_URL || "redis://localhost:6379",
+			url: config.REDIS_URL,
 		},
 	},
 

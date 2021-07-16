@@ -6,9 +6,10 @@ import { Errors as WebErrors } from "moleculer-web";
 import DBConnection from "../mixins/db.mixin";
 import retryPromise from "../utils/retry";
 import { validateUrl, validateUuid } from "../utils/validator";
+import * as config from "../config";
 
 class WebhookService extends Service {
-	private DBMixin = new DBConnection("webhooks").start();
+	private DBMixin = new DBConnection(config.MONGO_WEBHOOK_COLLECTION).start();
 
 	public constructor(broker: ServiceBroker) {
 		super(broker);
