@@ -1,12 +1,16 @@
 import { Request, Response, NextFunction } from "express";
+import logger from "../logger";
+
+const GLOABL_ERROR_CONTEXT = "EXPRESS_GLOBAL_ERROR_HANDLER";
 
 export default (
   error: any,
-  _req: Request,
+  req: Request,
   res: Response,
   _next: NextFunction
 ) => {
   const status = error.status || 500;
   const message = error.message || "Internal Server Error";
-  res.status(status).send(message);
+  logger.error(GLOABL_ERROR_CONTEXT, req.originalUrl, { status, message });
+  res.status(status).json({ message });
 };
