@@ -10,7 +10,9 @@ const retryPromise = (
 			tries++;
 			if (tries <= maxTries) {
 				Promise.resolve(func())
-					.then(resolve)
+					.then((res: any) =>
+						resolve({ tries, success: true, result: res })
+					)
 					.catch((err: any) => {
 						errors.push(err);
 						if (delay === 0) {
@@ -20,14 +22,11 @@ const retryPromise = (
 						}
 					});
 			} else {
-				reject(
-					new Error(
-						`Retry count exceeded (${maxTries}): ${errors
-							// eslint-disable-next-line arrow-parens
-							.map((e) => e.message || "")
-							.join("")}`
-					)
-				);
+				reject({
+					tries: maxTries,
+					errors,
+					success: false,
+				});
 			}
 		};
 		retry();

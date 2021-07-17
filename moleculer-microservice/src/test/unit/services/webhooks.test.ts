@@ -77,6 +77,15 @@ describe("Test 'webhooks' service", () => {
 
 		describe("Test 'webhooks.delete'", () => {
 			it("should pass and delete the id", async () => {
+				const result = await broker.call("webhooks.list", {
+					id,
+				});
+				expect(result).toHaveLength(1);
+			});
+		});
+
+		describe("Test 'webhooks.delete'", () => {
+			it("should pass and delete the id", async () => {
 				service.adapter.removeById.mockClear();
 				const result = await broker.call("webhooks.delete", {
 					id,

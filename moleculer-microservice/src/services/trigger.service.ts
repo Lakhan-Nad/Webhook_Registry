@@ -1,21 +1,16 @@
 import { Context, Service, ServiceBroker, Errors } from "moleculer";
 
 import _ from "lodash";
-import DBConnection from "../mixins/db.mixin";
 import retryPromise from "../utils/retry";
 import { validateIP } from "../utils/validator";
-import * as config from "../config";
 import { PostRequest } from "../utils/post";
 
 class TriggerService extends Service {
-	private DBMixin = new DBConnection(config.MONGO_WEBHOOK_COLLECTION).start();
-
 	public constructor(broker: ServiceBroker) {
 		super(broker);
 
 		this.parseServiceSchema({
 			name: "trigger",
-			mixins: [this.DBMixin],
 			actions: {
 				run: {
 					cache: false,
@@ -38,15 +33,18 @@ class TriggerService extends Service {
 	private async runHandle(ctx: Context) {
 		// @ts-ignore
 		const { ip, startTime } = ctx.params;
-		const urls = await this.adapter.find();
+		const urls = await ctx.call("database.find", {});
 		const post = new PostRequest(ip, startTime);
+		// @ts-ignore
 		for (let i = 0; i < urls.length; i += 20) {
+			// @ts-ignore
 			const batch = urls.slice(i, Math.min(i + 20, urls.length));
 			const promises = batch.map((val: any) =>
 				retryPromise(post.post(val.targetURL), 5)
 			);
 			await Promise.allSettled(promises);
 		}
+		return true;
 	}
 
 	private validateIPAddress(ctx: Context) {

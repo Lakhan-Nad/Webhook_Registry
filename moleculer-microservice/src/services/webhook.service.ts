@@ -29,7 +29,7 @@ class WebhookService extends Service {
 				},
 				list: {
 					params: {},
-					cache: true,
+					cache: false,
 					handler: this.list.bind(this),
 					visibility: "published",
 				},
@@ -77,7 +77,6 @@ class WebhookService extends Service {
 			`Adding new Webhook: ${targetURL}`
 		);
 		const already = await this.adapter.find({ query: { targetURL } });
-		this.logger.info(already);
 		if (!_.isEmpty(already)) {
 			throw new WebErrors.InvalidRequestBodyError(null, {
 				targetURL,
@@ -102,8 +101,11 @@ class WebhookService extends Service {
 		};
 		const result = await retryPromise(insertFunction, 5);
 		// @ts-ignore
-		// eslint-disable-next-line no-underscore-dangle
-		return { id: result._id };
+		if (result.success) {
+			// @ts-ignore
+			// eslint-disable-next-line no-underscore-dangle
+			return { id: result.result._id };
+		}
 	}
 
 	private async list(_ctx: Context) {
@@ -135,17 +137,24 @@ class WebhookService extends Service {
 	}
 
 	private async trigger(ctx: Context) {
-		ctx.call("trigger.run", {
-			// @ts-ignore
-			ip: ctx.params.ipAddress,
-			startTime: Date.now(),
-		}).then(() => {
-			this.logger.debug(
-				"webhooks.trigger",
+		ctx.call(
+			"trigger.run",
+			{
 				// @ts-ignore
-				`completed processing ${ctx.params.ipAddress}`
-			);
-		});
+				ip: ctx.params.ipAddress,
+				startTime: Date.now(),
+			},
+			{
+				timeout: 20000, // timeout of 20 seconds, can be increased if webhooks size is more
+				fallbackResponse(ctx, err) {
+					ctx.service.logger.error(
+						"webhook.trigger",
+						"fallback",
+						err
+					);
+				},
+			}
+		);
 		// @ts-ignore
 		ctx.meta.$statusCode = 202;
 		// @ts-ignore
