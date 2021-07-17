@@ -51,16 +51,20 @@ class WebhookService extends Service {
 						before: ["validateId", "validateTargetURL"],
 					},
 				},
-				tigger: {
+				trigger: {
 					cache: false,
 					params: { ipAddress: "string" },
 					handler: this.trigger.bind(this),
 					visibility: "published",
+					hooks: {
+						before: ["startTimeHook"],
+					},
 				},
 			},
 			methods: {
 				validateTargetURL: this.validateTargetURL.bind(this),
 				validateId: this.validateId.bind(this),
+				startTimeHook: this.startTimeHook.bind(this),
 			},
 		});
 	}
@@ -131,7 +135,21 @@ class WebhookService extends Service {
 	}
 
 	private async trigger(ctx: Context) {
-		ctx.toJSON();
+		ctx.call("trigger.run", {
+			// @ts-ignore
+			ip: ctx.params.ipAddress,
+			startTime: Date.now(),
+		}).then(() => {
+			this.logger.debug(
+				"webhooks.trigger",
+				// @ts-ignore
+				`completed processing ${ctx.params.ipAddress}`
+			);
+		});
+		// @ts-ignore
+		ctx.meta.$statusCode = 202;
+		// @ts-ignore
+		ctx.meta.$statusMessage = "Webhook Triggered";
 	}
 
 	private validateTargetURL(ctx: Context) {
@@ -154,6 +172,12 @@ class WebhookService extends Service {
 				message: "Invalid ID",
 			});
 		}
+	}
+
+	private startTimeHook(ctx: Context) {
+		// @ts-ignore
+		ctx.params.startTime = Date.now();
+		return ctx;
 	}
 }
 

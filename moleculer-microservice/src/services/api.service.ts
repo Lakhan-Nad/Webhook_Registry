@@ -24,7 +24,7 @@ export default class ApiService extends Service {
 							"POST /": "webhooks.register",
 							"DELETE /:id": "webhooks.delete",
 							"PUT /:id": "webhooks.update",
-							"GET /trigger": "trigger.run",
+							"POST /trigger": "webhooks.trigger",
 						},
 					},
 				],

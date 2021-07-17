@@ -15,7 +15,11 @@
     "microservices",
     "moleculer"
   ],
-  "author": "",
+  "author": {
+    "name": "Lakhan Nad",
+    "email": "lakhannad1999@gmail.com",
+    "url": "https://github.com/Lakhan-Nad"
+  },
   "devDependencies": {
     "@types/body-parser": "^1.19.1",
     "@types/lodash": "^4.14.171",
@@ -26,6 +30,7 @@
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prefer-arrow": "^1.2.2",
+    "express": "^4.17.1",
     "jest": "^25.1.0",
     "jest-cli": "^25.1.0",
     "jest-environment-node": "^25.5.0",
@@ -39,6 +44,7 @@
     "@types/mkdirp": "^1.0.0",
     "@types/node": "^13.9.8",
     "body-parser": "^1.19.0",
+    "chalk": "^2.4.2",
     "dotenv": "^10.0.0",
     "ioredis": "^4.14.1",
     "lodash": "^4.17.21",

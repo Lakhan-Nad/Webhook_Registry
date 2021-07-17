@@ -9,3 +9,6 @@ export const validateUrl = (url: string): boolean =>
 // Validate uuid v4
 export const validateUuid = (uuid: string): boolean =>
 	validator.isUUID(uuid, 4);
+
+// validate ip addresss
+export const validateIP = (ip: string): boolean => validator.isIP(ip);
