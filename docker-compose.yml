@@ -19,15 +19,21 @@ services:
       - zipkin
   redis:
     image: redis
-    network_mode: host
+    network_mode: "host"
+
   zipkin:
     image: openzipkin/zipkin
-    network_mode: host
+    network_mode: "host"
+
   mongo:
     image: mongo
-    network_mode: host
+    network_mode: "host"
+
   express:
     build:
       context: ./express-app
     network_mode: host
     image: express-app
+    environment:
+      PORT: 7000
+      HOST: 0.0.0.0
