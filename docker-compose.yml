@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  webhooks:
+    build:
+      context: ./moleculer-microservice
+    network_mode: host
+    image: webhook-microservice
+    environment:
+      PORT: 3000
+      MONGO_URI: mongodb://localhost:27017/webhooks
+      LOG_LEVEL: debug
+      REDIS_URL: redis://localhost:6379
+      MONGO_WEBHOOK_COLLECTION: webhooks
+      SERVICES: dist/services
+    depends_on:
+      - redis
+      - mongo
+      - zipkin
+  redis:
+    image: redis
+    network_mode: host
+  zipkin:
+    image: openzipkin/zipkin
+    network_mode: host
+  mongo:
+    image: mongo
+    network_mode: host
+  express:
+    build:
+      context: ./express-app
+    network_mode: host
+    image: express-app
