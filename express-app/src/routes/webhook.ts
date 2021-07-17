@@ -1,10 +1,18 @@
 import { NextFunction, Router, Request, Response } from "express";
 import * as WebHookControllers from "../controllers/webhook";
+import validator from "validator";
+import { BadRequestError } from "../errors";
 
 const route = Router();
 
 // verify the id the webhook
 route.param("id", (_req: Request, _res: Response, next: NextFunction, id) => {
+  // we know all ids are uuid v4 so we can catch
+  // any other exception and send a bad request
+  if (!validator.isUUID(id, 4)) {
+    next(new BadRequestError("Invalid id"));
+    return;
+  }
   next();
 });
 

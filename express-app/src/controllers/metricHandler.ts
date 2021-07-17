@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { NotFoundError } from "../errors";
 import logger from "../logger";
 
 const EXPRESS_METRICS = "EXPRESS_METRICS";

@@ -1,7 +1,9 @@
 import express from "express";
 import NotFoundHandler from "../controllers/notFoundHandler";
 import IPRouter from "./ip";
+import WebhookRouter from "./webhook";
 import MetricCollector from "../controllers/metricHandler";
+import GlobalErrorHandler from "../controllers/globalErrorHandler";
 
 const app = express();
 
@@ -18,12 +20,12 @@ app.use(express.json());
 
 // routers
 app.use("/ip", IPRouter);
-app.use("/webhook");
+app.use("/webhook", WebhookRouter);
 
 // 404 error
 app.use(NotFoundHandler);
 
 // global error handler
-app.use();
+app.use(GlobalErrorHandler);
 
 export default app;

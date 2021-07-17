@@ -4,23 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc --build",
+    "start": "npm run build && node dist/index.js",
+    "dev": "ts-node src/index.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Lakhan Nad",
+    "email": "lakhannad1999@gmail.com",
+    "url": "https://github.com/Lakhan-Nad"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/lodash": "^4.14.171",
     "@types/node": "^16.3.2",
+    "@types/promise.allsettled": "^1.0.3",
     "@types/validator": "^13.6.3",
     "jest": "^27.0.6",
+    "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
+    "promise.allsettled": "^1.0.4",
     "validator": "^13.6.0"
   }
 }

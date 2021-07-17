@@ -4,6 +4,6 @@ import { trigger as TriggerController } from "../controllers/webhook";
 
 const route = express.Router();
 
-route.get("/", TriggerController);
+route.post("/", TriggerController);
 
 export default route;
