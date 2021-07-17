@@ -20,3 +20,7 @@ This is a [Moleculer](https://moleculer.services/)-based microservices project. 
 -   `npm run lint`: Run ESLint
 -   `npm run ci`: Run continuous test mode with watching
 -   `npm test`: Run tests & generate coverage report
+
+## Why make Trigger as a seperate service?
+
+-   If we have many webhooks registered then triggering each of them one by one might take lot of time and adding fault tolerence as well as giving a good timeout can consume lot of time on JS main thread. If the trigger is seperate service it also allows us to independently scale that service as the demand grows. Makes our code more maintainable and frees load on the main thread.
