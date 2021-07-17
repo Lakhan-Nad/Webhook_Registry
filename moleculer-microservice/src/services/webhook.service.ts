@@ -145,16 +145,16 @@ class WebhookService extends Service {
 				startTime: Date.now(),
 			},
 			{
-				timeout: 20000, // timeout of 20 seconds, can be increased if webhooks size is more
+				timeout: 20000, // timeout of 20 seconds, can be increased if no of webhooks is more
 				fallbackResponse(ctx, err) {
 					ctx.service.logger.error(
-						"webhook.trigger",
+						"webhooks.trigger",
 						"fallback",
 						err
 					);
 				},
 			}
-		);
+		).then(() => {});
 		// @ts-ignore
 		ctx.meta.$statusCode = 202;
 		// @ts-ignore

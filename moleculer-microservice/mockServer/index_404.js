@@ -6,9 +6,10 @@ app.use((req, res) => {
 	console.log(req.originalURL);
 	console.log(req.ip);
 	console.log(req.headers);
-	res.status(200).send();
+	res.status(404).end();
 });
 
-app.listen(6000, () => {
-	console.log("Mock server is listening on port 6000");
+app.listen(6002, () => {
+	console.log("Mock server is listening on port 6002");
+	console.log("I always return 404 not found response");
 });

@@ -24,3 +24,13 @@ This is a [Moleculer](https://moleculer.services/)-based microservices project. 
 ## Why make Trigger as a seperate service?
 
 -   If we have many webhooks registered then triggering each of them one by one might take lot of time and adding fault tolerence as well as giving a good timeout can consume lot of time on JS main thread. If the trigger is seperate service it also allows us to independently scale that service as the demand grows. Makes our code more maintainable and frees load on the main thread.
+
+## In the function calling the requests
+
+-   If a request is timed out in previous timeout, then the request will be retried with the new timeout value more than last one but less than equal to `maxTimeout`.
+-   If a request returns 404 in multiple requests (2 is limit in code, can be changed) then, it stops trying and fail.
+
+## Some Mock Servers are given in mockserver folder for testing.
+
+-   index\_[x].js file where [x] is nature of server.
+-   For example index_timeout.js server won't succeed in first request because request timeout is 1000ms but server returns response in 1500ms. But for next request it will succeed bcause next time timeout of request would be 2000.

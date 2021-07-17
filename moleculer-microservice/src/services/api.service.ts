@@ -15,6 +15,7 @@ export default class ApiService extends Service {
 			settings: {
 				port: config.PORT,
 				use: [bodyParser.json()],
+				mappingPolicy: "restrict",
 				routes: [
 					{
 						path: "/webhook",

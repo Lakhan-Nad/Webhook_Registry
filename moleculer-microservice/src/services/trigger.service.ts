@@ -1,7 +1,6 @@
 import { Context, Service, ServiceBroker, Errors } from "moleculer";
 
 import _ from "lodash";
-import retryPromise from "../utils/retry";
 import { validateIP } from "../utils/validator";
 import { PostRequest } from "../utils/post";
 
@@ -40,7 +39,7 @@ class TriggerService extends Service {
 			// @ts-ignore
 			const batch = urls.slice(i, Math.min(i + 20, urls.length));
 			const promises = batch.map((val: any) =>
-				retryPromise(post.post(val.targetURL), 5)
+				post.post(val.targetURL, 5)
 			);
 			await Promise.allSettled(promises);
 		}
